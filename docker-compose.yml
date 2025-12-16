@@ -7,6 +7,6 @@ services:
       args:
         GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     ports:
-      - "127.0.0.1:8083:80"
+      - "127.0.0.1:8083:8080"
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
