@@ -1,17 +1,17 @@
 export class JSLTService {
   /**
-   * Transforms input JSON using the Schibsted JSLT execution engine.
+   * Transforms input JSON using a browser-friendly JSLT-compatible engine.
    */
   static async transform(inputJson: string, jsltSchema: string): Promise<string> {
     try {
-      // Lazy import to avoid pulling the engine until transformation is requested
-      const { compile, transform } = await import("jslt-node");
+      // Lazy import to keep bundle size small and avoid parsing until needed
+      const jsonata = (await import("jsonata")).default;
 
       const parsedInput = JSON.parse(inputJson);
-      const compiled = compile(jsltSchema);
-      const transformed = transform(compiled, parsedInput);
+      const expression = jsonata(jsltSchema);
+      const transformed = await expression.evaluate(parsedInput);
 
-      return JSON.stringify(transformed, null, 2);
+      return JSON.stringify(transformed ?? null, null, 2);
     } catch (e: any) {
       console.error("Transformation Error", e);
       return JSON.stringify({
