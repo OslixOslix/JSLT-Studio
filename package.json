@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "jslt-node": "^0.0.6",
+    "jsonata": "^2.1.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
