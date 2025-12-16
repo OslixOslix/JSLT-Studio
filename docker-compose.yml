@@ -1,0 +1,12 @@
+services:
+  jslt-studio:
+    container_name: jslt-studio
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "127.0.0.1:8083:80"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
