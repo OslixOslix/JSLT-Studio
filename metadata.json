@@ -1,5 +1,5 @@
 {
   "name": "JSLT Studio",
-  "description": "A real-time JSLT (JSON Transformation) previewer and editor. Test your Schibsted JSLT schemas against JSON input instantly using Gemini 2.5.",
+  "description": "A real-time JSLT (JSON Transformation) previewer and editor. Test your Schibsted JSLT schemas against JSON input instantly with the embedded JSLT engine.",
   "requestFramePermissions": []
 }
