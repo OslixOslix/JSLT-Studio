@@ -1,22 +1,34 @@
 export class JSLTService {
   /**
-   * Transforms input JSON using a browser-friendly JSLT-compatible engine.
+   * Transforms input JSON using the official Schibsted JSLT engine executed locally on the server.
    */
   static async transform(inputJson: string, jsltSchema: string): Promise<string> {
+    const endpoint = import.meta.env.VITE_JSLT_ENDPOINT ?? "/api/transform";
+
     try {
-      // Lazy import to keep bundle size small and avoid parsing until needed
-      const jsonata = (await import("jsonata")).default;
-
       const parsedInput = JSON.parse(inputJson);
-      const expression = jsonata(jsltSchema);
-      const transformed = await expression.evaluate(parsedInput);
 
-      return JSON.stringify(transformed ?? null, null, 2);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          input: parsedInput,
+          jslt: jsltSchema
+        })
+      });
+
+      if (!response.ok) {
+        const details = await response.text();
+        throw new Error(`Engine responded with ${response.status}: ${details}`);
+      }
+
+      const result = await response.json();
+      return JSON.stringify(result, null, 2);
     } catch (e: any) {
       console.error("Transformation Error", e);
       return JSON.stringify({
-        error: "Failed to execute transformation.",
-        details: e.message
+        error: "Failed to execute transformation using the official JSLT engine.",
+        details: e.message ?? String(e)
       }, null, 2);
     }
   }
